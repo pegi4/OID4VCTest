@@ -33,6 +33,7 @@ app.post('/credential-offer', async (req, res) => {
 
   // Store session data
   sessionData[preAuthorizedCode] = { issued: false };
+  console.log("Stored preAuthorizedCode in sessionData:", preAuthorizedCode);
 
   // Construct the credential offer JSON
   const credentialOfferData = {
@@ -75,7 +76,9 @@ app.get('/credential-offer-data/:code', (req, res) => {
 
 // 3. Token Endpoint
 app.post('/token', (req, res) => {
-  const preAuthorizedCode = req.body['pre-authorized_code']; // Make sure this key matches
+  const preAuthorizedCode = req.body['pre-authorized_code'] || req.body['preAuthorizedCode'];
+  console.log("Received preAuthorizedCode:", preAuthorizedCode);
+  console.log("Session Data:", sessionData);
 
   if (sessionData[preAuthorizedCode] && !sessionData[preAuthorizedCode].issued) {
     const accessToken = `access-token-${preAuthorizedCode}`;
@@ -83,6 +86,7 @@ app.post('/token', (req, res) => {
     sessionData[preAuthorizedCode].accessToken = accessToken;
     return res.json({ access_token: accessToken });
   } else {
+    console.log("Unauthorized request or token already issued for code:", preAuthorizedCode);
     return res.status(401).send('Unauthorized or token already issued');
   }
 });
