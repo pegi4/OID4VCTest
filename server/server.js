@@ -144,8 +144,8 @@ app.post('/credential', (req, res) => {
     };
 
     // Log the credential response being sent
-    console.log("Issuing credential:", credential);
-    return res.json(credential);
+    console.log("Issuing credential:", { credential });
+    return res.json({ credential });
   } else {
     // Log the case when no matching session is found
     console.log("No session found for access token:", accessToken);
