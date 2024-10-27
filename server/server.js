@@ -6,6 +6,7 @@ const cors = require('cors');
 const app = express();
 app.use(cors()); 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); 
 
 let sessionData = {}; // Temporary in-memory storage for testing
 
@@ -74,7 +75,8 @@ app.get('/credential-offer-data/:code', (req, res) => {
 
 // 3. Token Endpoint
 app.post('/token', (req, res) => {
-  const { preAuthorizedCode } = req.body;
+  const preAuthorizedCode = req.body['pre-authorized_code']; // Make sure this key matches
+
   if (sessionData[preAuthorizedCode] && !sessionData[preAuthorizedCode].issued) {
     const accessToken = `access-token-${preAuthorizedCode}`;
     sessionData[preAuthorizedCode].issued = true;
