@@ -56,10 +56,10 @@ app.post('/credential-offer', async (req, res) => {
   sessionData[preAuthorizedCode].credentialOfferData = credentialOfferData;
 
   // Create a URL that points to the credential offer data
-  const credentialOfferURI = `openid-credential-offer://?credential_offer_uri=${process.env.REACT_APP_API_URL}/credential-offer-data/${preAuthorizedCode}`;
+  const credentialOfferURI = `openid-credential-offer://?credential_offer_uri=${encodeURIComponent(`${process.env.REACT_APP_API_URL}/credential-offer-data/${preAuthorizedCode}`)}`;
 
   console.log("Generated Credential Offer URI:", credentialOfferURI);
-  
+
   // Return the credential offer URI
   res.json(credentialOfferURI);
 });
