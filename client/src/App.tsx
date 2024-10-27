@@ -9,13 +9,14 @@ function App() {
       const response = await fetch(
         //'http://localhost:3000/credential-offer',
         'https://oid4vctest.onrender.com/credential-offer',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userData: { name: 'John Doe', email: 'john@example.com' }  // Simulate user data
-        }),
-      });
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userData: { name: 'John Doe', email: 'john@example.com' }  // Simulate user data
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error('Failed to fetch credential offer');

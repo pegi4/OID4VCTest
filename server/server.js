@@ -26,18 +26,26 @@ app.post('/credential-offer', async (req, res) => {
   sessionData[preAuthorizedCode] = { issued: false };
 
   const credentialOffer = {
-    credential_issuer: process.env.REACT_APP_API_URL  || 'http://localhost:3000',
+    credential_issuer: process.env.REACT_APP_API_URL || 'http://localhost:3000',
     credentials: [
       {
         format: "jwt_vc_json",
         types: ["VerifiableCredential", "TicketCredential"]
       }
     ],
-    pre_authorized_code: preAuthorizedCode,
-    user_pin_required: false
+    grants: {
+      "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
+        "pre-authorized_code": preAuthorizedCode,
+        "user_pin_required": false
+      }
+    }
   };
 
-  res.json(credentialOffer);
+  // Encode the credential offer as a URL parameter
+  const credentialOfferURI = `openid-credential-offer://?credential_offer=${encodeURIComponent(JSON.stringify(credentialOffer))}`;
+
+  // Send back the credential offer URI as JSON
+  res.json(credentialOfferURI);
 });
 
 // 3. Token Endpoint
