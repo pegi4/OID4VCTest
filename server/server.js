@@ -20,12 +20,24 @@ app.get('/.well-known/openid-credential-issuer', (req, res) => {
 
 // 2. Credential Offer Endpoint
 app.post('/credential-offer', async (req, res) => {
-  const preAuthorizedCode = Math.random().toString(36).substr(2, 9); // Generate unique code
+  const preAuthorizedCode = Math.random().toString(36).substr(2, 9);
+
+  // Store session data
   sessionData[preAuthorizedCode] = { issued: false };
 
-  const credentialOfferRequest = `openid-credential-offer://?issuer=${process.env.REACT_APP_API_URL || 'http://localhost:3000'}&credential_type=TicketCredential&pre-authorized_code=${preAuthorizedCode}&user_pin_required=false`;
+  const credentialOffer = {
+    credential_issuer: process.env.REACT_APP_API_URL  || 'http://localhost:3000',
+    credentials: [
+      {
+        format: "jwt_vc_json",
+        types: ["VerifiableCredential", "TicketCredential"]
+      }
+    ],
+    pre_authorized_code: preAuthorizedCode,
+    user_pin_required: false
+  };
 
-  res.json(credentialOfferRequest); // For QR generation
+  res.json(credentialOffer);
 });
 
 // 3. Token Endpoint
