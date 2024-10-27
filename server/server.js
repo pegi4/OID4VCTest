@@ -15,6 +15,7 @@ app.get('/.well-known/openid-credential-issuer', (req, res) => {
     issuer: process.env.REACT_APP_API_URL || 'http://localhost:3000',
     credential_formats: ['jwt_vc_json'],
     grant_types_supported: ['urn:ietf:params:oauth:grant-type:pre-authorized_code'],
+    token_endpoint: `${process.env.REACT_APP_API_URL}/token`,
   });
 });
 
