@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-const cors = require('cors');
+app.use(cors({ origin: '*' }));
 
 const app = express();
 app.use(cors()); 
@@ -78,7 +78,7 @@ app.get('/credential-offer-data/:code', (req, res) => {
 
 // 3. Token Endpoint
 app.post('/token', (req, res) => {
-  const preAuthorizedCode = req.body['pre-authorized_code'] || req.body['preAuthorizedCode'];
+  const preAuthorizedCode = req.body['pre-authorized_code'];
   console.log("Received preAuthorizedCode:", preAuthorizedCode);
   console.log("Session Data:", sessionData);
 
