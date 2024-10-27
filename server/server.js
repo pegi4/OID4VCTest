@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const env = require('dotenv').config();
+require('dotenv').config();
 const cors = require('cors');
 
 const app = express();
@@ -12,7 +12,7 @@ let sessionData = {}; // Temporary in-memory storage for testing
 // 1. Well-Known Endpoint for OpenID Credential Issuer
 app.get('/.well-known/openid-credential-issuer', (req, res) => {
   res.json({
-    issuer: process.env.NGROK || 'http://localhost:3000',
+    issuer: process.env.REACT_APP_API_URL || 'http://localhost:3000',
     credential_formats: ['jwt_vc_json'],
     grant_types_supported: ['urn:ietf:params:oauth:grant-type:pre-authorized_code'],
   });
@@ -23,7 +23,7 @@ app.post('/credential-offer', async (req, res) => {
   const preAuthorizedCode = Math.random().toString(36).substr(2, 9); // Generate unique code
   sessionData[preAuthorizedCode] = { issued: false };
 
-  const credentialOfferRequest = `openid-credential-offer://?issuer=${process.env.NGROK || 'http://localhost:3000'}&credential_type=TicketCredential&pre-authorized_code=${preAuthorizedCode}&user_pin_required=false`;
+  const credentialOfferRequest = `openid-credential-offer://?issuer=${process.env.REACT_APP_API_URL || 'http://localhost:3000'}&credential_type=TicketCredential&pre-authorized_code=${preAuthorizedCode}&user_pin_required=false`;
 
   res.json(credentialOfferRequest); // For QR generation
 });
