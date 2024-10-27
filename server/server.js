@@ -18,6 +18,7 @@ app.get('/.well-known/openid-credential-issuer', (req, res) => {
     grant_types_supported: ['urn:ietf:params:oauth:grant-type:pre-authorized_code'],
     token_endpoint: `${process.env.REACT_APP_API_URL}/token`,
     authorization_server: process.env.REACT_APP_API_URL || 'http://localhost:3000',
+    credential_endpoint: `${process.env.REACT_APP_API_URL}/credential`,
   });
 });
 
