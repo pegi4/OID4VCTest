@@ -13,7 +13,7 @@ let sessionData = {}; // Temporary in-memory storage for testing
 // 1. Well-Known Endpoint for OpenID Credential Issuer
 app.get('/.well-known/openid-credential-issuer', (req, res) => {
   res.json({
-    issuer: process.env.REACT_APP_API_URL || 'http://localhost:3000',
+    credential_issuer: process.env.REACT_APP_API_URL || 'http://localhost:3000',
     credential_formats: ['jwt_vc_json'],
     grant_types_supported: ['urn:ietf:params:oauth:grant-type:pre-authorized_code'],
     token_endpoint: `${process.env.REACT_APP_API_URL}/token`,
@@ -24,7 +24,7 @@ app.get('/.well-known/openid-credential-issuer', (req, res) => {
 
 app.get('/.well-known/openid-configuration', (req, res) => {
   res.json({
-    issuer: process.env.REACT_APP_API_URL || 'http://localhost:3000',
+    credential_issuer: process.env.REACT_APP_API_URL || 'http://localhost:3000',
     token_endpoint: `${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/token`,
   });
 });
