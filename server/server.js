@@ -18,14 +18,14 @@ app.get('/.well-known/openid-credential-issuer', (req, res) => {
   });
 });
 
-// 2. Credential Offer Endpoint
 app.post('/credential-offer', async (req, res) => {
   const preAuthorizedCode = Math.random().toString(36).substr(2, 9);
 
   // Store session data
   sessionData[preAuthorizedCode] = { issued: false };
 
-  const credentialOffer = {
+  // Construct the credential offer JSON
+  const credentialOfferData = {
     credential_issuer: process.env.REACT_APP_API_URL || 'http://localhost:3000',
     credentials: [
       {
@@ -41,11 +41,26 @@ app.post('/credential-offer', async (req, res) => {
     }
   };
 
-  // Encode the credential offer as a URL parameter
-  const credentialOfferURI = `openid-credential-offer://?credential_offer=${encodeURIComponent(JSON.stringify(credentialOffer))}`;
+  // Save the credential offer data to an endpoint
+  sessionData[preAuthorizedCode].credentialOfferData = credentialOfferData;
 
-  // Send back the credential offer URI as JSON
+  // Create a URL that points to the credential offer data
+  const credentialOfferURI = `openid-credential-offer://?credential_offer_uri=${encodeURIComponent(`${process.env.REACT_APP_API_URL}/credential-offer-data/${preAuthorizedCode}`)}`;
+
+  // Return the credential offer URI
   res.json(credentialOfferURI);
+});
+
+// New endpoint to serve the credential offer data directly
+app.get('/credential-offer-data/:code', (req, res) => {
+  const { code } = req.params;
+  const offerData = sessionData[code]?.credentialOfferData;
+
+  if (offerData) {
+    res.json(offerData);
+  } else {
+    res.status(404).send('Credential offer not found');
+  }
 });
 
 // 3. Token Endpoint
