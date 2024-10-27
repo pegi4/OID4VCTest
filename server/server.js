@@ -16,6 +16,14 @@ app.get('/.well-known/openid-credential-issuer', (req, res) => {
     credential_formats: ['jwt_vc_json'],
     grant_types_supported: ['urn:ietf:params:oauth:grant-type:pre-authorized_code'],
     token_endpoint: `${process.env.REACT_APP_API_URL}/token`,
+    authorization_server: process.env.REACT_APP_API_URL || 'http://localhost:3000',
+  });
+});
+
+app.get('/.well-known/openid-configuration', (req, res) => {
+  res.json({
+    issuer: process.env.REACT_APP_API_URL || 'http://localhost:3000',
+    token_endpoint: `${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/token`,
   });
 });
 
