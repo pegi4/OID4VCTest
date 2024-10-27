@@ -86,6 +86,7 @@ app.post('/token', (req, res) => {
     const accessToken = `access-token-${preAuthorizedCode}`;
     //sessionData[preAuthorizedCode].issued = true;
     sessionData[preAuthorizedCode].accessToken = accessToken;
+    console.log("Issued access token:", accessToken);
     return res.json({ access_token: accessToken });
   } else {
     console.log("Unauthorized request or token already issued for code:", preAuthorizedCode);
