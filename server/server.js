@@ -80,9 +80,9 @@ app.post('/token', (req, res) => {
   console.log("Received preAuthorizedCode:", preAuthorizedCode);
   console.log("Session Data:", sessionData);
 
-  if (sessionData[preAuthorizedCode] && !sessionData[preAuthorizedCode].issued) {
+  if (sessionData[preAuthorizedCode]) {
     const accessToken = `access-token-${preAuthorizedCode}`;
-    sessionData[preAuthorizedCode].issued = true;
+    //sessionData[preAuthorizedCode].issued = true;
     sessionData[preAuthorizedCode].accessToken = accessToken;
     return res.json({ access_token: accessToken });
   } else {
