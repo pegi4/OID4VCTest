@@ -103,5 +103,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(3000, () => {
-  console.log('OID4VC test server running on http://localhost:3000');
+  console.log('OID4VC test server running on', process.env.REACT_APP_API_URL);
 });
