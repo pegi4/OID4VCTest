@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const cors = require('cors');
+const veramoAgent = require('./veramoAgent'); // Import Veramo agent
 
 const app = express();
 app.use(cors()); 
@@ -11,15 +12,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let sessionData = {}; // Temporary in-memory storage for testing
 
 // 1. Well-Known Endpoint for OpenID Credential Issuer
-app.get('/.well-known/openid-credential-issuer', (req, res) => {
-  res.json({
-    credential_issuer: process.env.REACT_APP_API_URL || 'http://localhost:3000',
-    credential_formats: ['jwt_vc_json'],
-    grant_types_supported: ['urn:ietf:params:oauth:grant-type:pre-authorized_code'],
-    token_endpoint: `${process.env.REACT_APP_API_URL}/token`,
-    authorization_server: process.env.REACT_APP_API_URL || 'http://localhost:3000',
-    credential_endpoint: `${process.env.REACT_APP_API_URL}/credential`,
-  });
+app.get('/.well-known/openid-credential-issuer', async (req, res) => {
+  try {
+    const metadata = await veramoAgent.handleIssuerServerMetadataRequest();
+    res.json(metadata);
+  } catch (error) {
+    console.error("Error fetching metadata:", error);
+    res.status(500).send({ error: 'Failed to retrieve metadata' });
+  }
 });
 
 app.get('/.well-known/openid-configuration', (req, res) => {
@@ -85,7 +85,7 @@ app.post('/token', (req, res) => {
 
   if (sessionData[preAuthorizedCode]) {
     const accessToken = `access-token-${preAuthorizedCode}`;
-    //sessionData[preAuthorizedCode].issued = true;
+    sessionData[preAuthorizedCode].issued = true;
     sessionData[preAuthorizedCode].accessToken = accessToken;
     console.log("Issued access token:", accessToken);
     return res.json({ access_token: accessToken });
@@ -96,9 +96,7 @@ app.post('/token', (req, res) => {
 });
 
 // 4. Credential Issuance Endpoint
-// 4. Credential Issuance Endpoint
-app.post('/credential', (req, res) => {
-  // Log the incoming request headers
+app.post('/credential', async (req, res) => {
   console.log("Incoming request headers:", req.headers);
 
   const { authorization } = req.headers;
@@ -108,18 +106,15 @@ app.post('/credential', (req, res) => {
     return res.status(401).send('Authorization header missing');
   }
 
-  const accessToken = authorization.split(' ')[1]; // Extract token from header
+  const accessToken = authorization.split(' ')[1];
 
-  // Log the extracted access token
   console.log("Extracted access token:", accessToken);
 
-  // Find the session based on the access token
   const session = Object.values(sessionData).find(
     (session) => session.accessToken === accessToken
   );
 
   if (session) {
-    // Log the session data found
     console.log("Session found for access token:", session);
 
     const credential = {
@@ -143,11 +138,9 @@ app.post('/credential', (req, res) => {
       }
     };
 
-    // Log the credential response being sent
     console.log("Issuing credential:", { credential });
     return res.json({ credential });
   } else {
-    // Log the case when no matching session is found
     console.log("No session found for access token:", accessToken);
     return res.status(401).send('Invalid token or unauthorized');
   }
@@ -155,7 +148,7 @@ app.post('/credential', (req, res) => {
 
 app.get('/', (req, res) => {
     res.send("Hello World");
-})
+});
 
 app.listen(3000, () => {
   console.log('OID4VC test server running on', process.env.REACT_APP_API_URL);
