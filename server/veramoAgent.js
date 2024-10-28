@@ -1,13 +1,14 @@
-// veramoAgent.js
-const { createAgent } = require('@veramo/core');
-const { DIDManager } = require('@veramo/did-manager');
-const { KeyManager, MemoryKeyStore, MemoryPrivateKeyStore } = require('@veramo/key-manager');
-const { KeyManagementSystem } = require('@veramo/kms-local');
-const { CredentialPlugin } = require('@veramo/credential-w3c');
-const { DIDResolverPlugin } = require('@veramo/did-resolver');
-const { OIDCRPPlugin } = require('@blockchain-lab-um/oidc-rp-plugin');
-const { Resolver } = require('did-resolver');
-require('dotenv').config();
+import { createAgent } from '@veramo/core';
+import { DIDManager } from '@veramo/did-manager';
+import { KeyManager, MemoryKeyStore, MemoryPrivateKeyStore } from '@veramo/key-manager';
+import { KeyManagementSystem } from '@veramo/kms-local';
+import { CredentialPlugin } from '@veramo/credential-w3c';
+import { DIDResolverPlugin } from '@veramo/did-resolver';
+import { OIDCRPPlugin } from '@blockchain-lab-um/oidc-rp-plugin';
+import { Resolver } from 'did-resolver';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 async function createVeramoAgent(issuerUrl) {
   return createAgent({
@@ -50,6 +51,5 @@ async function createVeramoAgent(issuerUrl) {
   });
 }
 
-// Create and export the Veramo agent
-const veramoAgent = createVeramoAgent(process.env.REACT_APP_API_URL || 'http://localhost:3000');
-module.exports = veramoAgent;
+const veramoAgent = await createVeramoAgent(process.env.REACT_APP_API_URL || 'http://localhost:3000');
+export default veramoAgent;

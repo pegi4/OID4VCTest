@@ -16,6 +16,7 @@
     "@veramo/core": "^6.0.0",
     "@veramo/credential-w3c": "^6.0.0",
     "@veramo/did-manager": "^6.0.0",
+    "@veramo/did-resolver": "^6.0.0",
     "@veramo/key-manager": "^6.0.0",
     "@veramo/kms-local": "^6.0.0",
     "body-parser": "^1.20.3",
@@ -27,5 +28,6 @@
   },
   "engines": {
     "node": "20.x"
-  }
+  },
+  "type": "module"
 }

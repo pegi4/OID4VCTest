@@ -20,6 +20,9 @@ importers:
       '@veramo/did-manager':
         specifier: ^6.0.0
         version: 6.0.0
+      '@veramo/did-resolver':
+        specifier: ^6.0.0
+        version: 6.0.0
       '@veramo/key-manager':
         specifier: ^6.0.0
         version: 6.0.0
@@ -1520,6 +1523,9 @@ packages:
 
   '@veramo/did-manager@6.0.0':
     resolution: {integrity: sha512-sjF0d0ZE+h7Jw7WwGtyRhjT5MhKBwGLx2AsR2Ao0qqyloVAxVS9jDcl2DP1ZdCKC+7BR4X30E1ja99N7q3INDg==}
+
+  '@veramo/did-resolver@6.0.0':
+    resolution: {integrity: sha512-qhbS7r2NLsSJzBrDT8ZmD9Bf8SGibM2+Z32h43X7fXb5mVnPY+wcEoaO4uGSpNzI7WTdDBqXIqnBXmLWsZqWDA==}
 
   '@veramo/key-manager@6.0.0':
     resolution: {integrity: sha512-YFvE6SQs1SOMvgQ38KZOeS64jV8B6a6vMz6yA2FEABANA3rdJJnZe9QVo5V6VQ+1yQ5pmzub+NbBytIUvgJRMQ==}
@@ -7507,6 +7513,19 @@ snapshots:
       '@veramo/did-discovery': 6.0.0
     transitivePeerDependencies:
       - supports-color
+
+  '@veramo/did-resolver@6.0.0':
+    dependencies:
+      '@veramo/core-types': 6.0.0
+      '@veramo/utils': 6.0.0
+      cross-fetch: 4.0.0
+      debug: 4.3.7
+      did-resolver: 4.1.0
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - supports-color
+      - utf-8-validate
 
   '@veramo/key-manager@6.0.0':
     dependencies:
