@@ -79,6 +79,7 @@ app.get('/credential-offer-data/:code', (req, res) => {
 
 // 3. Token Endpoint
 app.post('/token', (req, res) => {
+  console.log("Incoming request body:", req.body);
   const preAuthorizedCode = req.body['pre-authorized_code'];
   console.log("Received preAuthorizedCode:", preAuthorizedCode);
   console.log("Session Data:", sessionData);
