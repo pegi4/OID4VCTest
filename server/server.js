@@ -62,7 +62,7 @@ app.post('/credential-offer', async (req, res) => {
   console.log("Generated Credential Offer URI:", credentialOfferURI);
 
   // Return the credential offer URI
-  res.json(credentialOfferURI);
+  res.json({credentialOfferURI});
 });
 
 // New endpoint to serve the credential offer data directly

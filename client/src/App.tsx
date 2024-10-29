@@ -7,13 +7,14 @@ function App() {
   const handlePurchase = async () => {
     try {
       const response = await fetch(
-        //'http://localhost:3000/credential-offer',
-        'https://oid4vctest.onrender.com/credential-offer',
+        'http://localhost:3000/credential-offer',
+        //'https://oidctest.onrender.com/credential-offer',
+        //'https://oid4vctest.onrender.com/credential-offer',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            userData: { name: 'John Doe', email: 'john@example.com' }  // Simulate user data
+            userData: { name: 'John Doe', email: 'john@example.com' }
           }),
         }
       );
@@ -23,8 +24,10 @@ function App() {
       }
 
       const credentialOfferRequest = await response.json();
-      setQrCodeUrl(credentialOfferRequest); // Set the QR code URL to display it
-      console.log(credentialOfferRequest);
+      setQrCodeUrl(credentialOfferRequest.credentialOfferURI);
+      console.log(credentialOfferRequest.credentialOfferURI);
+      // setQrCodeUrl(credentialOfferRequest); // Set the QR code URL to display it
+      // console.log(credentialOfferRequest);
     } catch (error) {
       console.error('Error generating credential offer:', error);
     }
@@ -38,6 +41,7 @@ function App() {
         <div>
           <h3>Scan this QR code with your wallet</h3>
           <QRCode className="padding" value={qrCodeUrl} /> {/* QR value as URL string */}
+          <p> { qrCodeUrl }</p>
         </div>
       )}
     </div>
